@@ -62,6 +62,7 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 ## Author
 Created by Jude Nwachukwu Onyejekwe.
+
 Suggested by Elad Levy
 
 Created as part of the [Dumbdata.co](https://dumbdata.co) measurement resource hub to provide you with resources that help simplify measurement.
