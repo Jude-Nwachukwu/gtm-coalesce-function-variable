@@ -1,0 +1,5 @@
+homepage: 'https://dumbdata.co/'
+documentation: 'https://github.com/Jude-Nwachukwu/gtm-coalesce-function-variable'
+versions:
+  - sha: 72c3d89c6a988ca73317210168f87433bd399988
+    changeNotes: Initial release.
