@@ -2,6 +2,9 @@
 
 A Google Tag Manager custom variable template that mimics the behavior of a coalesce function commonly used in programming. This variable checks a sequence of variables and returns the first valid value, supporting skip values and a fallback mechanism.
 
+**Here is the custom template repository for the [server GTM custom template](https://github.com/Jude-Nwachukwu/sgtm-coalesce-function-variable)**
+
+
 ## Features
 
 1. **Check Multiple Variables in Order**  
