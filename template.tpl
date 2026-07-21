@@ -10,14 +10,14 @@ ___INFO___
 
 {
   "type": "MACRO",
-  "id": "cvt_temp_public_id",
+  "id": "cvt_5TQT9",
   "version": 1,
-  "securityGroups": [],
   "displayName": "Variable Coalesce",
-  "description": "Returns the first non-undefined, non-null value from a list of variables. If no valid value is found, a fallback value is returned.",
+  "description": "Checks a list of variables in order and returns the first valid value found (non-undefined, non-null value, non-empty), with optional value skipping and a configurable fallback. No custom JavaScript.",
   "containerContexts": [
     "WEB"
-  ]
+  ],
+  "securityGroups": []
 }
 
 
@@ -25,12 +25,33 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
-    "type": "TEXT",
-    "name": "variableInputs",
-    "displayName": "Input Variables (Comma-Separated)",
-    "simpleValueType": true,
-    "valueHint": "{{var1}},{{var2}},{{var3}},{{var4}}",
-    "help": "Enter a list of variables separated by commas."
+    "type": "PARAM_TABLE",
+    "name": "VariableTableInput",
+    "displayName": "Enter Variables In Each Row",
+    "paramTableColumns": [
+      {
+        "param": {
+          "type": "TEXT",
+          "name": "variableInputTextRow",
+          "displayName": "Variable List",
+          "simpleValueType": true,
+          "valueValidators": [
+            {
+              "type": "NON_EMPTY"
+            }
+          ],
+          "valueHint": "e.g. {{var 1}}"
+        },
+        "isUnique": true
+      }
+    ],
+    "newRowButtonText": "Add New Variable",
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ],
+    "help": "Enter a list of variables as rows"
   },
   {
     "type": "TEXT",
@@ -70,7 +91,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 const makeString = require('makeString');
 
 // Input fields
-const variableInputs = data.variableInputs || ""; // Comma-separated list of variables
+const variableTableInput = data.VariableTableInput || []; // Array of row objects: [{variableInputTextRow: "value"}, ...]
 const fallbackVariable = data.fallbackVariable || ""; // Fallback value
 const skipEnabled = data.skipVariableCheckBox === true; // Whether skipping is enabled
 const skipValuesInput = data.skipVariableInput || ""; // Comma-separated skip values
@@ -85,8 +106,18 @@ function parseCommaSeparated(input) {
   });
 }
 
+// Extract the variable values from the table rows, in row order
+function parseTableRows(tableInput) {
+  if (!tableInput) return [];
+  return tableInput.map(function(row) {
+    return row.variableInputTextRow;
+  }).filter(function(item) {
+    return item !== undefined && item !== null;
+  });
+}
+
 // Parse the input variables and skip values
-const variables = parseCommaSeparated(variableInputs);
+const variables = parseTableRows(variableTableInput);
 const skipValues = skipEnabled ? parseCommaSeparated(skipValuesInput) : [];
 
 // Function to check if a value is valid (non-undefined, non-null, non-empty)
@@ -97,8 +128,7 @@ function isValid(value) {
 // Main logic: Iterate through the variables and find the first valid value
 let result;
 for (let i = 0; i < variables.length; i++) {
-  const variableValue = makeString(variables[i]); // Directly process the value from the input list
-
+  const variableValue = makeString(variables[i]); // Directly process the value from the table row
   if (isValid(variableValue)) {
     // If skipping is enabled, ensure the value is not in the skip list
     if (!skipEnabled || skipValues.indexOf(variableValue) === -1) {
