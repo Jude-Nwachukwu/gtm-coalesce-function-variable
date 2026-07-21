@@ -1,5 +1,9 @@
 homepage: 'https://dumbdata.co/'
 documentation: 'https://github.com/Jude-Nwachukwu/gtm-coalesce-function-variable'
 versions:
+#LATEST VERSION
+  - sha: 97b1c347d11ba48298a58b308d3c9a8ea08b6adf
+    changeNotes: encodeUri trackingid.
+#INITIAL VERSION
   - sha: 72c3d89c6a988ca73317210168f87433bd399988
     changeNotes: Initial release.
